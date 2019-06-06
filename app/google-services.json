@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1019908441700",
+    "firebase_url": "https://hospital-chatbot-41cb1.firebaseio.com",
+    "project_id": "hospital-chatbot-41cb1",
+    "storage_bucket": "hospital-chatbot-41cb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019908441700:android:1f5aaf92dd5d9001",
+        "android_client_info": {
+          "package_name": "com.example.chatapp2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019908441700-iaosjfle9q2hend59aocuisnsr13q745.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatapp2",
+            "certificate_hash": "a16d17bffb1ea72ca57915ad5c47784911a61679"
+          }
+        },
+        {
+          "client_id": "1019908441700-s7l5s3ieva6dabrdcl82kl7stoknm6c5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9qEHlIpqBfcIa1CCslIFl4N1_RsSVq4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019908441700-s7l5s3ieva6dabrdcl82kl7stoknm6c5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
