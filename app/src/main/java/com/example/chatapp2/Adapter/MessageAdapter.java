@@ -24,7 +24,7 @@ import java.util.List;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     public static final int MSG_TYPE_LEFT=0;
-    public static final int MSG_TYPE_RIGHT=0;
+    public static final int MSG_TYPE_RIGHT=1;
     private Context mContext;
     private List<Chat> mChat;
     private String imageuri;

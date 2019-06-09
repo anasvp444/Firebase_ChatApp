@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.chatapp2.Fragments.ChatsFragment;
+import com.example.chatapp2.Fragments.ProfileFragment;
 import com.example.chatapp2.Fragments.UsersFragment;
 import com.example.chatapp2.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,6 +88,7 @@ public class WorkActivity extends AppCompatActivity {
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
         viewPageAdapter.addFragment(new ChatsFragment(),"Chats");
         viewPageAdapter.addFragment(new UsersFragment(),"Users");
+        viewPageAdapter.addFragment(new ProfileFragment(),"Profile");
 
         viewPager.setAdapter(viewPageAdapter);
         tabLayout.setupWithViewPager(viewPager);
