@@ -16,7 +16,9 @@ import com.example.chatapp2.Adapter.UserAdapter;
 import com.example.chatapp2.Model.Chat;
 import com.example.chatapp2.Model.Chatlist;
 import com.example.chatapp2.Model.User;
+import com.example.chatapp2.Notifications.Token;
 import com.example.chatapp2.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +38,12 @@ public class ChatsFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<Chatlist> mUsers;
+    private List<User> mUsers;
 
     FirebaseUser fuser;
     DatabaseReference reference;
 
-    private List<String> userList;
+    private List<Chatlist> userList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +64,9 @@ public class ChatsFragment extends Fragment {
                 userList.clear();
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                    userList.add(chatlist);
                 }
+                chatList();
             }
 
             @Override
@@ -69,10 +75,50 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String deviceToken = instanceIdResult.getToken();
+                updateToken(deviceToken);
+            }
+        });
         return view;
     }
 
+    private void updateToken(String token){
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com")
+                .getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(fuser.getUid()).setValue(token1);
+    }
 
+    private void chatList() {
+        mUsers = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com")
+                .getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUsers.clear();
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    User user = snapshot.getValue(User.class);
+                    for(Chatlist chatlist:userList){
+                        if(user.getId().equals(chatlist.getId())){
+                            mUsers.add(user);
+                        }
+                    }
+                }
+                userAdapter = new UserAdapter(getContext(),mUsers,true);
+                recyclerView.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 
 }
