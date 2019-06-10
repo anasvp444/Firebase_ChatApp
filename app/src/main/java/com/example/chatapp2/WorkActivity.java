@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -68,11 +69,12 @@ public class WorkActivity extends AppCompatActivity {
                 username.setText(user.getUsername());
 
                 if(user.getImageUri().equals("default")){
-                    Log.d("MyActivity", "db ref: "+user.getImageUri());
+                    //Log.d("MyActivity", "db ref: "+user.getImageUri());
                     profile_image.setImageResource(R.mipmap.ic_launcher);
                 }
                 else {
-                    Glide.with(WorkActivity.this).load(user.getImageUri()).into(profile_image);
+                    //Log.d("MyActivity1", user.getImageUri());
+                    Glide.with(getApplicationContext()).load(user.getImageUri()).into(profile_image);
                 }
             }
 
@@ -106,8 +108,9 @@ public class WorkActivity extends AppCompatActivity {
 
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(WorkActivity.this, MainActivity.class));
-                finish();
+                startActivity(new Intent(WorkActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                //finish();
+
                 return true;
         }
         return false;
@@ -145,6 +148,28 @@ public class WorkActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return titles.get(position);
         }
+    }
+
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com")
+                .getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status",status);
+        reference.updateChildren(hashMap);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
     }
 }
 

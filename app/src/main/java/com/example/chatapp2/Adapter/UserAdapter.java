@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.chatapp2.LoginActivity;
 import com.example.chatapp2.MessageActivity;
 import com.example.chatapp2.Model.User;
 import com.example.chatapp2.R;
@@ -22,10 +23,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
     private List<User> mUsers;
+    private boolean ischat;
 
-    public UserAdapter(Context mContext, List<User> mUser){
+    public UserAdapter(Context mContext, List<User> mUser, boolean ischat){
         this.mUsers= mUser;
         this.mContext= mContext;
+        this.ischat = ischat;
     }
 
     @NonNull
@@ -47,6 +50,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Glide.with(mContext).load(user.getImageUri()).into(holder.profile_image);
         }
 
+        if(ischat){
+            //Log.d("MyActivity1", user.getStatus());
+            if(user.getStatus().equals("online")){
+                holder.img_on.setVisibility(View.VISIBLE);
+                holder.img_off.setVisibility(View.GONE);
+            }
+            else{
+                holder.img_on.setVisibility(View.GONE);
+                holder.img_off.setVisibility(View.VISIBLE);
+
+            }
+        }else{
+            holder.img_on.setVisibility(View.GONE);
+            holder.img_off.setVisibility(View.GONE);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,11 +85,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView username;
         public ImageView profile_image;
+        private ImageView img_on;
+        private ImageView img_off;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.username);
             profile_image = itemView.findViewById(R.id.profile_image);
+            img_on = itemView.findViewById(R.id.img_on);
+            img_off = itemView.findViewById(R.id.img_off);
 
         }
     }

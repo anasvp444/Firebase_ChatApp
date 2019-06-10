@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,8 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_login;
     FirebaseAuth auth;
 
+    TextView forgot_password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +40,16 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password= findViewById(R.id.password);
         btn_login= findViewById(R.id.btn_login);
+        forgot_password= findViewById(R.id.forgot_password);
 
         auth = FirebaseAuth.getInstance();
+
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
+            }
+        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override

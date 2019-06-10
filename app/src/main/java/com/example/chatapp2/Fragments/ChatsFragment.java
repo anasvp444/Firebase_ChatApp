@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.chatapp2.Adapter.UserAdapter;
 import com.example.chatapp2.Model.Chat;
+import com.example.chatapp2.Model.Chatlist;
 import com.example.chatapp2.Model.User;
 import com.example.chatapp2.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,7 @@ public class ChatsFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
+    private List<Chatlist> mUsers;
 
     FirebaseUser fuser;
     DatabaseReference reference;
@@ -50,23 +51,16 @@ public class ChatsFragment extends Fragment {
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         userList = new ArrayList<>();
-        reference= FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com").getReference("Chats");
+
+        reference = FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com")
+                .getReference("Chatlist").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList.clear();
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Chat chat =  snapshot.getValue(Chat.class);
-
-                    if(chat.getSender().equals(fuser.getUid())){
-                        userList.add(chat.getReceiver());
-                    }
-                    if(chat.getReceiver().equals(fuser.getUid())){
-                        userList.add(chat.getSender());
-                    }
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
                 }
-
-                readChats();
             }
 
             @Override
@@ -78,46 +72,7 @@ public class ChatsFragment extends Fragment {
         return view;
     }
 
-    private void readChats(){
 
-        mUsers = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance("https://hospital-chatbot-41cb1-a1a15.firebaseio.com").getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers.clear();
-
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    User user = snapshot.getValue(User.class);
-
-                    for(String id: userList){
-                        if(user.getId().equals(id)){
-                            if(mUsers.size() !=0){
-                                for(User userl : mUsers){
-                                    if(!user.getId().equals(userl.getId())){
-                                        Log.d("MyActivity1", user.getUsername());
-                                        mUsers.add(user);
-                                    }
-                                }
-                            }
-                            else {
-                                mUsers.add(user);
-                            }
-                        }
-                    }
-                }
-                userAdapter= new UserAdapter(getContext(), mUsers);
-                recyclerView.setAdapter(userAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
 
 
 }

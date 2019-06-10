@@ -5,11 +5,16 @@ public class User {
     private String id;
     private String username;
     private String imageUri;
+    private String status;
+    private String search;
 
-    public User(String id, String username, String imageURL) {
+
+    public User(String id, String username, String imageUri, String status , String search) {
         this.id = id;
         this.username = username;
         this.imageUri = imageUri;
+        this.status = status;
+        this.search = search;
     }
 
     public User() {
@@ -35,7 +40,24 @@ public class User {
         return imageUri;
     }
 
-    public void setImageURL(String imageUri) {
+
+    public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }
